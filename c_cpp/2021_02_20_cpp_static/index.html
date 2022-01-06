@@ -1,0 +1,905 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.4">
+    
+    
+      
+        <title>C++关键字static总结 - 王天龙的博客</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bb3983ee.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cstatic" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="王天龙的博客" class="md-header__button md-logo" aria-label="王天龙的博客" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            王天龙的博客
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              C++关键字static总结
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="王天龙的博客" class="md-nav__button md-logo" aria-label="王天龙的博客" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    王天龙的博客
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        首页
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          c&c++
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="c&c++" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          c&c++
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2021_02_06_cpp_function_default_parameters/" class="md-nav__link">
+        C++的缺省函数到底是在声明中确定还是在定义中确定
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          C++关键字static总结
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        C++关键字static总结
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    面向过程
+  </a>
+  
+    <nav class="md-nav" aria-label="面向过程">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    静态全局变量
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    静态局部变量
+  </a>
+  
+    <nav class="md-nav" aria-label="静态局部变量">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    应用场景
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    静态函数
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    面向对象
+  </a>
+  
+    <nav class="md-nav" aria-label="面向对象">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    静态数据成员
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    静态成员函数
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2021_02_23_cpp_map_reference/" class="md-nav__link">
+        C++ Map使用汇总
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2022_01_05_rvalue/" class="md-nav__link">
+        右值引用和move语义
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          leetcode
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="leetcode" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          leetcode
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../leetcode/2021_02_21_leetcode_n_queens/" class="md-nav__link">
+        N皇后的位运算解法
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../leetcode/2021_03_20_n_factorial_zeros/" class="md-nav__link">
+        n的阶乘结果后面有多少个0
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../leetcode/2021_03_22_leetcode_valid_number/" class="md-nav__link">
+        有效数字
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          操作系统
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="操作系统" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          操作系统
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operation_system/2020_12_24_buffer_overflow_attack/" class="md-nav__link">
+        缓冲区溢出攻击
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operation_system/2021_06_12_can_a_thread_access_the_stack_of_other_threads/" class="md-nav__link">
+        一个线程能访问另一个线程的栈吗
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    面向过程
+  </a>
+  
+    <nav class="md-nav" aria-label="面向过程">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    静态全局变量
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    静态局部变量
+  </a>
+  
+    <nav class="md-nav" aria-label="静态局部变量">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    应用场景
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    静态函数
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    面向对象
+  </a>
+  
+    <nav class="md-nav" aria-label="面向对象">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    静态数据成员
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    静态成员函数
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+<h1 id="cstatic">C++关键字static总结</h1>
+<p>C++的static关键字有两种用法，分别是面向过程和面向对象。面向过程有静态全局变量，静态局部变量，静态函数；面向对象有静态成员变量，静态成员函数。</p>
+<h2 id="_1">面向过程</h2>
+<h3 id="_2">静态全局变量</h3>
+<p>在全局变量前，加上关键字static，该变量就被定义成为一个静态全局变量。例如：</p>
+<pre><code class="language-c++">#include&lt;iostream&gt;
+
+using namespace std;
+
+static int globalValue1;
+
+int main() {    
+    cout &lt;&lt; globalValue1 &lt;&lt; endl;
+}
+</code></pre>
+<p>静态全局变量由以下特点：</p>
+<ol>
+<li>该变量在全局数据区分配内存，其实静态变量都在全局数据区分配内存，包括静态局部变量</li>
+<li>未经初始化的静态全局变量会被程序自动初始化为0（自动变量的自动初始化值是随机的）</li>
+<li>静态全局变量在声明它的整个文件都是可见的，而在文件之外是不可见的，即静态全局变量不能被其它文件所用。因此，<strong>其它文件中可以定义相同名字的变量，不会发生冲突</strong>，这是静态全局变量的优点。</li>
+</ol>
+<p>例如</p>
+<pre><code class="language-c++">//main.cpp
+#include&lt;iostream&gt;
+
+using namespace std;
+
+static int globalValue1;
+
+int main() {    
+    cout &lt;&lt; globalValue1 &lt;&lt; endl;
+}
+
+//source.cpp
+#include&lt;iostream&gt;
+
+using namespace std;
+
+int globalValue1 = 1;
+
+void f1() {
+    globalValue1 += 1;
+    cout &lt;&lt; globalValue1 &lt;&lt; endl;
+
+}
+</code></pre>
+<p>如果两个文件里的<code>globalValue1</code>都没有static修饰，这回引发重定义的错误；只要有一个<code>gobalValue1</code>有修饰都可以正常运行。</p>
+<p>如果把source.cpp的<code>globalValue1</code>改成<code>extern int globalValue1</code>，也会报错。</p>
+<h3 id="_3">静态局部变量</h3>
+<p>在局部变量前，加上关键字static，该变量就被定义成为一个静态局部变量。它有以下特点</p>
+<ol>
+<li>静态局部变量在全局数据区分配内存；</li>
+<li>静态局部变量在程序执行到该对象的声明处时被首次初始化，即以后的函数调用不再进行初始化；</li>
+<li>静态局部变量一般在声明处初始化，如果没有显式初始化，会被程序自动初始化为0；</li>
+<li>静态局部变量始终驻留在全局数据区，直到程序运行结束。但其作用域为局部作用域，当定义它的函数或语句块结束时，其作用域随之结束</li>
+</ol>
+<h4 id="_4">应用场景</h4>
+<p>通常，在函数体内定义了一个变量，每当程序运行到该语句时都会给该局部变量分配栈内存。但随着程序退出函数体，系统就会收回栈内存，局部变量也相应失效。</p>
+<p>但有时候我们需要在两次调用之间对变量的值进行保存。通常的想法是定义一个全局变量来实现。但这样一来，变量已经不再属于函数本身了，不再仅受函数的控制，这给程序的维护带来不便。</p>
+<p>静态局部变量正好可以解决这个问题。静态局部变量保存在全局数据区，而不是保存在栈中，每次的值保持到下一次调用，直到下次赋新值。</p>
+<p>例如</p>
+<pre><code class="language-c++">#include &lt;iostream.h&gt;
+void fn();
+void main()
+{
+    fn(); //10
+    fn(); //11
+    fn(); //12
+}
+
+void fn()
+{
+    static n=10;
+    cout&lt;&lt;n&lt;&lt;endl;
+    n++;
+}
+</code></pre>
+<h3 id="_5">静态函数</h3>
+<p>在函数的返回类型前加上static关键字,函数即被定义为静态函数。静态函数与普通函数不同，它只能在声明它的文件当中可见，不能被其它文件使用。定义静态函数的好处：（类似于静态全局变量）</p>
+<ol>
+<li>静态函数不能被其它文件所用；</li>
+<li>其它文件中可以定义相同名字的函数，不会发生冲突；</li>
+<li>可以把静态函数的定义放到.h文件，多个.cpp文件include时，不会引起重定义的错误。</li>
+</ol>
+<p>例如</p>
+<pre><code class="language-c++">// main.cpp
+#include&lt;iostream&gt;
+// #include&quot;source.h&quot;,即使include了void f1();的声明，也不会报错
+
+using namespace std;
+
+static void f1() {
+    cout &lt;&lt; &quot;main.f1()&quot; &lt;&lt; endl;
+}
+
+int main() {    
+    f1();
+}
+
+// source.cpp
+#include&lt;iostream&gt;
+#include &quot;source.h&quot;
+
+
+void f1() {
+    std::cout &lt;&lt; &quot;source.f1&quot; &lt;&lt; std::endl;
+}
+</code></pre>
+<h2 id="_6">面向对象</h2>
+<h3 id="_7">静态数据成员</h3>
+<p>在类内数据成员的声明前加上关键字static，该数据成员就是类内的静态数据成员。例如</p>
+<pre><code class="language-c++">// main.cpp
+#include&lt;iostream&gt;
+#include&quot;source.h&quot;
+
+using namespace std;
+
+int main() {
+    MyClass a(1, 2, 3);
+    a.getSum();
+    MyClass b(2, 3, 4);
+    b.getSum();
+    a.getSum();
+    cout &lt;&lt; MyClass::Num &lt;&lt; endl;
+}
+
+// source.h
+#pragma once
+
+class MyClass {
+public:
+    static int Num;
+    MyClass(int a,int b,int c);
+    void getSum();
+private:
+    int a, b, c;
+    static int Sum;  // 声明静态数据成员
+};
+
+// source.cpp
+#include&lt;iostream&gt;
+#include &quot;source.h&quot;
+
+using namespace std;
+
+int MyClass::Num = 3;
+int MyClass::Sum = 0;  // 定义并初始化静态数据成员
+MyClass::MyClass(int a, int b, int c) {
+    this-&gt;a = a;
+    this-&gt;b = b;
+    this-&gt;c = c;
+    Sum = a + b + c;
+}
+
+void MyClass::getSum() {
+    cout &lt;&lt; Sum &lt;&lt; endl;
+}
+</code></pre>
+<p>它有以下特点</p>
+<ol>
+<li>静态成员变量是该类的所有对象所共有的。对于普通成员变量，每个类对象都有自己的一份拷贝。而静态成员变量一共就一份，无论这个类的对象被定义了多少个，静态成员变量只分配一次内存，由该类的所有对象共享访问。所以，静态数据成员的值对每个对象都是一样的，它的值可以更新；</li>
+<li>因为静态数据成员在<strong>全局数据区分配内存</strong>，由本类的所有对象共享，所以，它不属于特定的类对象，不占用对象的内存，而是在所有对象之外开辟内存，<strong>在没有产生类对象时其作用域就可见</strong>。因此，在没有类的实例存在时，静态成员变量就已经存在，我们就可以操作它；</li>
+<li>静态成员变量存储在全局数据区。<strong>static 成员变量的内存空间既不是在声明类时分配，也不是在创建对象时分配，而是在初始化时分配。静态成员变量必须初始化，而且只能在类体外进行。</strong>否则，编译能通过，链接不能通过。在source.cpp中，语句<code>int Myclass::Sum=0;</code>是定义并初始化静态成员变量。初始化时可以赋初值，也可以不赋值。如果不赋值，那么会被默认初始化，一般是 0。静态数据区的变量都有默认的初始值，而动态数据区（堆区、栈区）的变量默认是垃圾值。并且，一般不再.h文件里定义并初始化静态成员变量，否则如果多个源文件include该头文件是，会导致重定义错误。</li>
+<li>static 成员变量和普通 static 变量一样，编译时在静态数据区分配内存，到程序结束时才释放。这就意味着，static 成员变量不随对象的创建而分配内存，也不随对象的销毁而释放内存。而普通成员变量在对象创建时分配内存，在对象销毁时释放内存。</li>
+<li>静态数据成员初始化与一般数据成员初始化不同。<strong>初始化时可以不加 static，但必须要有数据类型。</strong>被 private、protected、public 修饰的 static 成员变量都可以用这种方式初始化。静态数据成员初始化的格式为：＜数据类型＞＜类名＞::＜静态数据成员名＞=＜值＞</li>
+<li>类的静态成员变量访问形式1：＜类对象名＞.＜静态数据成员名＞</li>
+<li>类的静态成员变量访问形式2：＜类类型名＞::＜静态数据成员名＞，也即，<strong>静态成员不需要通过对象就能访问。</strong></li>
+<li>静态数据成员和普通数据成员一样遵从public,protected,private访问规则；</li>
+<li>如果静态数据成员的访问权限允许的话（即public的成员），可在程序中，按上述格式来引用静态数据成员 ；</li>
+<li>sizeof 运算符不会计算 静态成员变量。</li>
+</ol>
+<h3 id="_8">静态成员函数</h3>
+<p>与静态成员变量类似，我们也可以声明一个静态成员函数。</p>
+<p>静态成员函数为类服务而不是为某一个类的具体对象服务。静态成员函数与静态成员变量一样，都是类的内部实现，属于类定义的一部分。普通成员函数必须具体作用于某个对象，而静态成员函数并不具体作用于某个对象。</p>
+<p>普通的成员函数一般都隐含了一个this指针，this指针指向类的对象本身，因为普通成员函数总是具体地属于类的某个具体对象的。当函数被调用时，系统会把当前对象的起始地址赋给 this 指针。通常情况下，this是缺省的。如函数fn()实际上是this-&gt;fn()。</p>
+<p>与普通函数相比，静态成员函数属于类本身，而不作用于对象，因此它不具有this指针。正因为它没有指向某一个对象，所以它无法访问属于类对象的非静态成员变量和非静态成员函数，它只能调用其余的静态成员函数和静态成员变量。从另一个角度来看，由于静态成员函数和静态成员变量在类实例化之前就已经存在可以访问，而此时非静态成员还是不存在的，因此静态成员不能访问非静态成员。</p>
+<p><strong>静态成员函数的特点：</strong></p>
+<ol>
+<li>出现在类体外的函数定义不能指定关键字static；</li>
+<li>静态成员之间可以相互访问，即静态成员函数（仅）可以访问静态成员变量、静态成员函数；</li>
+<li>静态成员函数不能访问非静态成员函数和非静态成员变量；</li>
+<li>非静态成员函数可以任意地访问静态成员函数和静态数据成员；</li>
+<li>由于<strong>没有this指针的额外开销</strong>，静态成员函数与类的全局函数相比速度上会稍快；</li>
+<li>
+<p>调用静态成员函数，和普通成员函数一样遵守private、protected、public访问原则，两种方式：</p>
+</li>
+<li>
+<p>通过成员访问操作符(.)和(-&gt;)，也即通过类对象或指向类对象的指针调用静态成员函数。</p>
+</li>
+<li>直接通过类来调用静态成员函数。＜类名＞::＜静态成员函数名＞（＜参数表＞）。也即，静态成员不需要通过对象就能访问。</li>
+</ol>
+<p><strong>拷贝构造函数的问题</strong></p>
+<p>在使用包含静态成员的类时，有时候会调用拷贝构造函数生成临时的隐藏的类对象，而这个临时对象在消亡时会调用析构函数有可能会对静态变量做操作（例如total_num--），可是这些对象在生成时却没有执行构造函数中的total_num++的操作。解决方案是为这个类写一个拷贝构造函数，在该拷贝构造函数中完成total_num++的操作。</p>
+<h1 id="ref">REF</h1>
+<p>https://zhuanlan.zhihu.com/p/37439983</p>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="页脚">
+      
+        
+        <a href="../2021_02_06_cpp_function_default_parameters/" class="md-footer__link md-footer__link--prev" aria-label="上一页: C++的缺省函数到底是在声明中确定还是在定义中确定" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              C++的缺省函数到底是在声明中确定还是在定义中确定
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../2021_02_23_cpp_map_reference/" class="md-footer__link md-footer__link--next" aria-label="下一页: C++ Map使用汇总" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              C++ Map使用汇总
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "search": "../../assets/javascripts/workers/search.361d90f1.min.js"}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.289a2a4b.min.js"></script>
+      
+    
+  </body>
+</html>
