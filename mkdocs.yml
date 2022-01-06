@@ -2,3 +2,18 @@ site_name: 王天龙的博客
 theme:
     name: "material"
     language: "zh"
+
+nav:
+  - 首页: index.md
+  - c&c++:
+    - C++的缺省函数到底是在声明中确定还是在定义中确定: c_cpp/2021_02_06_cpp_function_default_parameters.md
+    - C++关键字static总结: c_cpp/2021_02_20_cpp_static.md
+    - C++ Map使用汇总: c_cpp/2021_02_23_cpp_map_reference.md
+    - 右值引用和move语义: c_cpp/2022_01_05_rvalue.md
+  - leetcode:
+    - N皇后的位运算解法: leetcode/2021_02_21_leetcode_n_queens.md
+    - n的阶乘结果后面有多少个0: leetcode/2021_03_20_n_factorial_zeros.md
+    - 有效数字: leetcode/2021_03_22_leetcode_valid_number.md
+  - 操作系统:
+    - 缓冲区溢出攻击: operation_system/2020_12_24_buffer_overflow_attack.md
+    - 一个线程能访问另一个线程的栈吗: operation_system/2021_06_12_can_a_thread_access_the_stack_of_other_threads.md
