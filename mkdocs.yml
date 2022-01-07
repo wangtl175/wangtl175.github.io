@@ -3,6 +3,10 @@ theme:
     name: "material"
     language: "zh"
 
+markdown_extensions:
+  - toc:
+      permalink: True
+
 nav:
   - 首页: index.md
   - c&c++:
