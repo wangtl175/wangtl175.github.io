@@ -6,7 +6,7 @@
 
 ## DFA
 
-<img src="2021-03-22-leetcode_valid_number.assets/IMG_0583.PNG" alt="yQze0I.png" style="zoom:80%;"/>
+<img src="/leetcode/2021-03-22-leetcode_valid_number.assets/IMG_0583.PNG" alt="yQze0I.png" style="zoom:80%;"/>
 
 ## 代码
 
