@@ -651,12 +651,12 @@
               
                 
 
-<h1 id="_1">缓冲区溢出攻击</h1>
+<h1 id="_1">缓冲区溢出攻击<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <p>缓冲区溢出(buffer-overflow)是一种非常普遍、同时非常危险的漏洞，在各种操作系统、应用软件中广泛存在。缓冲区溢出攻击是利用缓冲区溢出漏洞所进行的攻击，轻则可以导致程序失败、系统关机等，重则可以利用它执行非授权指令，甚至获取系统特权，从而进行其它的非法操作。缓冲区攻击有栈溢出、堆溢出、格式化字符串漏洞、整形变量溢出等。本文将主要介绍堆栈溢出攻击，并实现对一个ubuntu 16.04系统的简单的栈攻击，获取其root权限。</p>
-<h3 id="_2">实验平台</h3>
+<h3 id="_2">实验平台<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
 <p>操作系统：SEED Ubuntu16.04 VM (32-bit)，镜像下载地址：https://seedsecuritylabs.org/lab_env.html</p>
 <p>虚拟机：Oracle VM VirtualBox 6.0.4</p>
-<h3 id="_3">堆栈溢出原理</h3>
+<h3 id="_3">堆栈溢出原理<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
 <p>在计算机里，堆栈是内存里的一段区域。堆一般由程序员分配释放，如果程序员不释放，程序结束时可能由操作系统回收，分配方式类似于数据结构中的链表；栈由操作系统自动分配释放，存放函数的参数值、局部变量、返回地址等，分配方式类似于数据结构中的栈。以堆栈溢出为代表的缓冲区溢出已经成为最普遍的安全漏洞，由此引发的安全问题比比皆是。堆栈溢出的原因一般有以下几种：</p>
 <ol>
 <li>函数调用层次太深。函数递归调用时，系统要在栈中不断保存函数调用时的现场和产生的变量，如果递归调用太深，就会造成栈溢出，这时递归无法返回。再有，当函数调用层次过深时也可能导致栈无法容纳这些调用的返回地址而造成栈溢出。</li>
@@ -665,7 +665,7 @@
 <li>指针非法访问。指针保存了一个非法的地址，通过这样的指针访问所指向的地址时会产生内存访问错误。</li>
 </ol>
 <p>在一些高级语言中，类似python, java, go等，有一些机制用于防止栈溢出，比如，python默认的递归深度是1000，当递归调用超过这个深度后就会引发异常。此外，编译器层面上也有对堆栈进行保护，其中最著名的是Stack Guard和Stack-smashing Protectection。在操作系统的层面上，为了减少堆栈溢出带来的危害，还有类似于地址空间随机化的机制。</p>
-<h4 id="_4">程序的内存布局</h4>
+<h4 id="_4">程序的内存布局<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h4>
 <p>为了进一步了解堆栈溢出的工作原理，首先来了解一个进程的内存是如何分配的。对于一个典型的C语言程序，其运行时，内存由5个短组成，分别为代码段（text segment），数据段（data segment），BSS段（BSS segment），堆（heap），栈（stack），这5个段在内存中分布如下</p>
 <p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p1.png" alt="yQze0I.png" style="zoom:80%;"/></p>
 <p>代码段中存放程序的代码；数据段中存放着由程序员初始化的静态/全局变量，例如，<code>stack int a=3;</code>中的<code>a</code>变量；BSS段中存放着未初始化的静态/全局变量，例如，<code>stack int b;</code>中的<code>b</code>变量；堆是动态分配的内存，c语言中，<code>malloc</code>、<code>calloc</code>等函数用于申请动态内存，<code>free</code>函数用于释放，在途中是向上增长；栈则存放函数内定义的局部变量、函数返回地址、函数参数等，在图中是向下增长。注意，在现在的操作系统中，这几个段不一定是连在一起的。</p>
@@ -715,7 +715,7 @@ int main() {
 }
 </code></pre>
 <p>这个攻击的思路就是，首先在内存中放置一段可以获取root权限恶意代码，然后利用<code>strcpy</code>没有边界检查的特点造成栈溢出修改函数的返回地址，跳转到恶意代码执行。</p>
-<h3 id="_5">实现栈溢出攻击</h3>
+<h3 id="_5">实现栈溢出攻击<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
 <p>为防止缓冲区溢出漏洞，已经出现了多种保护机制。为了实现这次攻击，我们需要停用一些保护机制，具体是：地址空间随机化 (Address Randomization)、不可执行栈 (Non-executable Stack)、Stack Guard。</p>
 <p>假设有一个具有栈溢出漏洞的程序如下：</p>
 <pre><code class="language-c">/* stack.c */
@@ -844,9 +844,9 @@ void main(int argc, char **argv)
 <p>在这个sh里，可以对受保护文件进行修改，例如<code>vim /etc/passwd</code></p>
 <p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p11.png" alt="p1" style="zoom:80%;" /></p>
 <p>可见，成功地获取了系统的root权限。</p>
-<h3 id="_6">对于栈溢出的保护措施</h3>
+<h3 id="_6">对于栈溢出的保护措施<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <p>在进行实验时，我们停用了几个保护措施，现在我们来探讨一下这些保护措施是如何抵御栈溢出攻击的。</p>
-<h4 id="_7">地址空间随机化</h4>
+<h4 id="_7">地址空间随机化<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h4>
 <p>地址空间随机化，顾名思义，程序每次加载到的内存位置是随机的，所以，即使可以利用栈溢出控制函数的返回地址，但是无法确定恶意代码的位置，因此，可以有效地防范栈溢出攻击。</p>
 <p>现在我们开启地址空间随机化再进行重复上述攻击</p>
 <pre><code class="language-shell">su root
@@ -857,7 +857,7 @@ exit
 <p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p12.png" alt="p1" style="zoom:80%;" /></p>
 <p>使用gdb查看<code>str</code>的地址，发现已经不是原来的0xbfffea37了，攻击失败时显然易见的。</p>
 <p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p13.png" alt="p1" style="zoom:120%;" /></p>
-<h4 id="_8">不可执行栈</h4>
+<h4 id="_8">不可执行栈<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h4>
 <p>不可执行栈的基本原理是将数据所在的内存页标记为不可执行的，当进程尝试去执行数据页面上的指令时，CPU就会抛出异常，而不是去执行。所以，当开启了不可执行栈选项时，即使我们的恶意代码已经插入到内存，但由于处在数据页面，因此无法执行。</p>
 <p>再次关闭地址空间随机化，gcc编译stack时开启不可执行栈选项</p>
 <pre><code class="language-shell">su root
@@ -870,7 +870,7 @@ exit
 <p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p14.png" alt="p1" style="zoom:120%;" /></p>
 <p>进行攻击，仍然失败</p>
 <p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p15.png" alt="p1" style="zoom:120%;" /></p>
-<h4 id="stack-guard">Stack Guard</h4>
+<h4 id="stack-guard">Stack Guard<a class="headerlink" href="#stack-guard" title="Permanent link">&para;</a></h4>
 <p>gcc中的Stack Guard的保护原理时利用 "Canaries" 检测对函数栈的破坏。具体是再缓冲区（如：栈）和控制信息（如 ebp等）间插入一个canary word。这样，当缓冲区溢出时，再返回地址被覆盖之前canary word会首先被覆盖，通过检测canary word的值是否被修改，就可以判断是否发生了溢出。还是以上述的<a href="#c">简单c程序</a>为例</p>
 <p>gcc开启Stack Guard对fun.c进行编译，然后用gdb查看<code>fun</code>函数的汇编</p>
 <pre><code class="language-shell">gcc -g fun.c -o fun  # gcc默认开启Stack Guard
@@ -893,9 +893,9 @@ exit
 </code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/wangtl175/images/img/p20.png" alt="p1" style="zoom:80%;" /></p>
 <p>可以看到，栈溢出被检测到并终止了进程。</p>
-<h3 id="_9">结束语</h3>
+<h3 id="_9">结束语<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
 <p>通过这次实验，加深了我对操作系统、计算机组成原理、编译器等方面的理解，同时也认识到了缓冲区溢出所带来的危害。为此，我们要养成良好的编程习惯，例如使用安全型函数避免风险。</p>
-<h3 id="_10">参考</h3>
+<h3 id="_10">参考<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
 <p><a href="https://www.ibm.com/developerworks/cn/linux/l-cn-gccstack/?S_TACT=105AGX52&amp;S_CMP=tec-ccid#ibm-pcon">GCC 中的编译器堆栈保护技术</a></p>
 <p><a href="https://www.handsonsecurity.net/files/chapters/buffer_overflow.pdf">SEED BOOKS</a></p>
 

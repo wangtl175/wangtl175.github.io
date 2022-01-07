@@ -515,8 +515,8 @@
               
                 
 
-<h1 id="move">右值引用和move语义</h1>
-<h2 id="_1">左值和右值</h2>
+<h1 id="move">右值引用和move语义<a class="headerlink" href="#move" title="Permanent link">&para;</a></h1>
+<h2 id="_1">左值和右值<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>首先，我们先来了解一些左值（lvalue, location value）和右值（rvalue, read value）的概念。通俗来说，左值可以出现在等号的左边和右边，右值只能出现在等号右边。左值，指的是如果一个表达式可以引用到某一个对象，并且这个对象是一块内存空间且可以被检查和存储，那么这个表达式就可以作为一个左值[<a href="https://baike.baidu.com/item/%E5%8F%B3%E5%80%BC/6187364">1</a>]。即左值是一个表达式，可以通过&amp;操作符来获取其地址。如果一个表达式不是左值，就是右值。</p>
 <p>C++中常见的出现右值的情况[<a href="https://www.ttlarva.com/master/learn_cpp/01_rvalue_ref.html">2</a>]:</p>
 <ol>
@@ -532,7 +532,7 @@
 std::string("abcd"); // 无名对象</code></p>
 </li>
 </ol>
-<h2 id="_2">左值引用和右值引用</h2>
+<h2 id="_2">左值引用和右值引用<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <p>如果一个左值，同时是引用，就称为“左值引用”[<a href="https://segmentfault.com/a/1190000003793498">3</a>]。非const左值引用，不能用右值对其赋值</p>
 <pre><code class="language-c++">std::string&amp; s = std::string(&quot;hello&quot;);// 会报错
 // cannot bind non-const lvalue reference of type ‘std::string&amp;’ {aka ‘std::__cxx11::basic_string&lt;char&gt;&amp;’} to an rvalue of type ‘std::string’ {aka ‘std::__cxx11::basic_string&lt;char&gt;’}

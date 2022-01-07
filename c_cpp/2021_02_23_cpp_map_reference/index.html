@@ -935,22 +935,22 @@
               
                 
 
-<h1 id="c-map">C++ Map使用汇总</h1>
+<h1 id="c-map">C++ Map使用汇总<a class="headerlink" href="#c-map" title="Permanent link">&para;</a></h1>
 <p>总结Map的常用方法；以及如何在对Map进行遍历的同时，进行删除操作。</p>
 <p><a href="http://www.cplusplus.com/reference/map/map/">文档</a></p>
-<h2 id="map">Map特性</h2>
-<h3 id="associative">Associative</h3>
+<h2 id="map">Map特性<a class="headerlink" href="#map" title="Permanent link">&para;</a></h2>
+<h3 id="associative">Associative<a class="headerlink" href="#associative" title="Permanent link">&para;</a></h3>
 <p>Elements in associative containers are referenced by their <em>key</em> and not by their absolute position in the container.</p>
-<h3 id="ordered">Ordered</h3>
+<h3 id="ordered">Ordered<a class="headerlink" href="#ordered" title="Permanent link">&para;</a></h3>
 <p>The elements in the container follow <strong>a strict order</strong> at all times. All inserted elements are given a position in this order.</p>
-<h3 id="map_1">Map</h3>
+<h3 id="map_1">Map<a class="headerlink" href="#map_1" title="Permanent link">&para;</a></h3>
 <p>Each element associates a <em>key</em> to a <em>mapped value</em>: Keys are meant to identify the elements whose main content is the <em>mapped value</em>.</p>
-<h3 id="unique-keys">Unique keys</h3>
+<h3 id="unique-keys">Unique keys<a class="headerlink" href="#unique-keys" title="Permanent link">&para;</a></h3>
 <p>No two elements in the container can have equivalent <em>keys</em>.</p>
-<h3 id="allocator-aware">Allocator-aware</h3>
+<h3 id="allocator-aware">Allocator-aware<a class="headerlink" href="#allocator-aware" title="Permanent link">&para;</a></h3>
 <p>The container uses an allocator object to dynamically handle its storage needs.</p>
-<h2 id="c11">常用方法（C++11）</h2>
-<h3 id="_1">声明和初始化</h3>
+<h2 id="c11">常用方法（C++11）<a class="headerlink" href="#c11" title="Permanent link">&para;</a></h2>
+<h3 id="_1">声明和初始化<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
 <pre><code class="language-c++">#include&lt;iostream&gt;
 #include&lt;map&gt;
 #include&lt;string&gt;
@@ -962,14 +962,14 @@ int main() {
     map&lt;string, int&gt; words = { {&quot;Jim&quot;,2012} ,{&quot;Tom&quot;,2023} };
 }
 </code></pre>
-<h3 id="_2">更新</h3>
-<h4 id="_3">插入</h4>
-<h5 id="_4">使用[]插入</h5>
+<h3 id="_2">更新<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<h4 id="_3">插入<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h4>
+<h5 id="_4">使用[]插入<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h5>
 <pre><code class="language-c++">map&lt;string, int&gt; words;
 words[&quot;apple&quot;] = 2;
 </code></pre>
 <p>如果key已经存在，则会作赋值修改，没有则插入。使用[]访问一个不存在的key时，值会初始化位0或'\0'或""(感觉不安全)。</p>
-<h5 id="insert">使用insert插入</h5>
+<h5 id="insert">使用insert插入<a class="headerlink" href="#insert" title="Permanent link">&para;</a></h5>
 <p>c++11中有4种方法，新增了<a href="http://www.cplusplus.com/reference/initializer_list/initializer_list/">interlizer_list</a>这种方法。<a href="http://www.cplusplus.com/reference/map/map/insert/">具体文档</a></p>
 <pre><code class="language-c++">#include &lt;iostream&gt;
 #include &lt;map&gt;
@@ -1014,8 +1014,8 @@ int main ()
   return 0;
 }
 </code></pre>
-<h4 id="_5">删除元素</h4>
-<h5 id="erase">erase</h5>
+<h4 id="_5">删除元素<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h4>
+<h5 id="erase">erase<a class="headerlink" href="#erase" title="Permanent link">&para;</a></h5>
 <pre><code class="language-c++">iterator  erase (const_iterator position);
 
 size_type erase (const key_type&amp; k);  //删除key为k的元素，返回删除了多少个元素
@@ -1026,18 +1026,18 @@ iterator  erase (const_iterator first, const_iterator last);  // 删除多个元
 <blockquote>
 <p>The other versions return an iterator to the element that follows the last element removed (or <a href="http://www.cplusplus.com/map::end">map::end</a>, if the last element was removed).</p>
 </blockquote>
-<h4 id="clear">clear</h4>
+<h4 id="clear">clear<a class="headerlink" href="#clear" title="Permanent link">&para;</a></h4>
 <pre><code class="language-c++">void clear() noexcept;
 </code></pre>
 <p>删除所有元素</p>
-<h4 id="swap">交换swap</h4>
+<h4 id="swap">交换swap<a class="headerlink" href="#swap" title="Permanent link">&para;</a></h4>
 <pre><code class="language-c++">void swap (map&amp; x);
 </code></pre>
 <p>和另一个相同类型的map交换元素。</p>
 <pre><code class="language-c++">std::map&lt;char,int&gt; foo,bar;
 foo.swap(bar);
 </code></pre>
-<h4 id="emplaceemplace_hint">emplace和emplace_hint</h4>
+<h4 id="emplaceemplace_hint">emplace和emplace_hint<a class="headerlink" href="#emplaceemplace_hint" title="Permanent link">&para;</a></h4>
 <p>类似于插入，为c++11新增</p>
 <pre><code class="language-c++">template &lt;class... Args&gt;
 pair&lt;iterator,bool&gt; emplace (Args&amp;&amp;... args);
@@ -1066,15 +1066,15 @@ int main ()
   return 0;
 }
 </code></pre>
-<h3 id="_6">取值</h3>
-<h4 id="_7">操作符[]</h4>
+<h3 id="_6">取值<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<h4 id="_7">操作符[]<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h4>
 <p>访问到不存在的key时，会引发插入操作。如果没有赋值给新的元素，则使用默认值</p>
 <blockquote>
 <p>If <em>k</em> does not match the key of any element in the container, the function inserts a new element with that key and returns a reference to its mapped value. Notice that this always increases the <a href="http://www.cplusplus.com/map::size">container size</a> by one, even if no mapped value is assigned to the element (the element is constructed using its default constructor).</p>
 </blockquote>
-<h4 id="at">at()</h4>
+<h4 id="at">at()<a class="headerlink" href="#at" title="Permanent link">&para;</a></h4>
 <p>c++11新增，或检测查询的key是否存在。如果不存在，则触发<a href="http://www.cplusplus.com/out_of_range">out_of_range</a>异常。</p>
-<h3 id="_8">容量查询</h3>
+<h3 id="_8">容量查询<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <pre><code class="language-c++">// 查询map是否为空
 bool empty();
 
@@ -1085,8 +1085,8 @@ size_t size();
 // 此外，这并不意味着用户一定可以存这么多，很可能还没达到就已经开辟内存失败了
 size_t max_size();
 </code></pre>
-<h3 id="_9">迭代器</h3>
-<h4 id="beginendcbegincend">begin和end，以及cbegin和cend</h4>
+<h3 id="_9">迭代器<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<h4 id="beginendcbegincend">begin和end，以及cbegin和cend<a class="headerlink" href="#beginendcbegincend" title="Permanent link">&para;</a></h4>
 <p>其中cbegin和cend是c++11新增的</p>
 <pre><code class="language-c++">/*begin &amp; end*/
 iterator begin() noexcept;
@@ -1102,7 +1102,7 @@ const_iterator cend() const noexcept;
 <blockquote>
 <p>A <code>const_iterator</code> is an iterator that points to const content. This iterator can be increased and decreased (unless it is itself also const), just like the <code>iterator</code> returned by <a href="http://www.cplusplus.com/map::begin">map::begin</a>, but it cannot be used to modify the contents it points to, even if the <a href="http://www.cplusplus.com/map">map</a> object is not itself const.</p>
 </blockquote>
-<h4 id="rbeginrendcrbegincrend">rbegin和rend，以及crbegin和crend</h4>
+<h4 id="rbeginrendcrbegincrend">rbegin和rend，以及crbegin和crend<a class="headerlink" href="#rbeginrendcrbegincrend" title="Permanent link">&para;</a></h4>
 <p>其中crbegin和crend是c++11新增的</p>
 <pre><code class="language-c++">/*rbegin &amp; rend*/
 // 返回一个指向最后一个元素的reverse_iterator
@@ -1143,7 +1143,7 @@ int main ()
 y =&gt; 200
 x =&gt; 100
 </code></pre>
-<h3 id="_10">其它操作</h3>
+<h3 id="_10">其它操作<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
 <pre><code class="language-c++">// 查找key为k的元素，如果不存在返回end
 iterator find (const key_type&amp; k);
 const_iterator find (const key_type&amp; k) const;
@@ -1174,7 +1174,7 @@ const_iterator upper_bound (const key_type&amp; k) const;
 pair&lt;const_iterator,const_iterator&gt; equal_range (const key_type&amp; k) const; // 等于key的元素范围，对于map来说，最多只有1个
 pair&lt;iterator,iterator&gt;             equal_range (const key_type&amp; k);
 </code></pre>
-<h3 id="map_2">Map遍历删除</h3>
+<h3 id="map_2">Map遍历删除<a class="headerlink" href="#map_2" title="Permanent link">&para;</a></h3>
 <p>对于c++里面的容器, 我们可以使用iterator进行方便的遍历. 但是当我们通过iterator对vector/map等进行删除时, 我们就要小心了, 因为操作往往会导致iterator失效, 之后的行为都变得不可预知.</p>
 <pre><code class="language-c++">int main(int argc, char* argv[])
 {

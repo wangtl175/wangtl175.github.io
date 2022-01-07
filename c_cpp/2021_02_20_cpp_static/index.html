@@ -635,10 +635,10 @@
               
                 
 
-<h1 id="cstatic">C++关键字static总结</h1>
+<h1 id="cstatic">C++关键字static总结<a class="headerlink" href="#cstatic" title="Permanent link">&para;</a></h1>
 <p>C++的static关键字有两种用法，分别是面向过程和面向对象。面向过程有静态全局变量，静态局部变量，静态函数；面向对象有静态成员变量，静态成员函数。</p>
-<h2 id="_1">面向过程</h2>
-<h3 id="_2">静态全局变量</h3>
+<h2 id="_1">面向过程<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h3 id="_2">静态全局变量<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
 <p>在全局变量前，加上关键字static，该变量就被定义成为一个静态全局变量。例如：</p>
 <pre><code class="language-c++">#include&lt;iostream&gt;
 
@@ -683,7 +683,7 @@ void f1() {
 </code></pre>
 <p>如果两个文件里的<code>globalValue1</code>都没有static修饰，这回引发重定义的错误；只要有一个<code>gobalValue1</code>有修饰都可以正常运行。</p>
 <p>如果把source.cpp的<code>globalValue1</code>改成<code>extern int globalValue1</code>，也会报错。</p>
-<h3 id="_3">静态局部变量</h3>
+<h3 id="_3">静态局部变量<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
 <p>在局部变量前，加上关键字static，该变量就被定义成为一个静态局部变量。它有以下特点</p>
 <ol>
 <li>静态局部变量在全局数据区分配内存；</li>
@@ -691,7 +691,7 @@ void f1() {
 <li>静态局部变量一般在声明处初始化，如果没有显式初始化，会被程序自动初始化为0；</li>
 <li>静态局部变量始终驻留在全局数据区，直到程序运行结束。但其作用域为局部作用域，当定义它的函数或语句块结束时，其作用域随之结束</li>
 </ol>
-<h4 id="_4">应用场景</h4>
+<h4 id="_4">应用场景<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h4>
 <p>通常，在函数体内定义了一个变量，每当程序运行到该语句时都会给该局部变量分配栈内存。但随着程序退出函数体，系统就会收回栈内存，局部变量也相应失效。</p>
 <p>但有时候我们需要在两次调用之间对变量的值进行保存。通常的想法是定义一个全局变量来实现。但这样一来，变量已经不再属于函数本身了，不再仅受函数的控制，这给程序的维护带来不便。</p>
 <p>静态局部变量正好可以解决这个问题。静态局部变量保存在全局数据区，而不是保存在栈中，每次的值保持到下一次调用，直到下次赋新值。</p>
@@ -712,7 +712,7 @@ void fn()
     n++;
 }
 </code></pre>
-<h3 id="_5">静态函数</h3>
+<h3 id="_5">静态函数<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
 <p>在函数的返回类型前加上static关键字,函数即被定义为静态函数。静态函数与普通函数不同，它只能在声明它的文件当中可见，不能被其它文件使用。定义静态函数的好处：（类似于静态全局变量）</p>
 <ol>
 <li>静态函数不能被其它文件所用；</li>
@@ -743,8 +743,8 @@ void f1() {
     std::cout &lt;&lt; &quot;source.f1&quot; &lt;&lt; std::endl;
 }
 </code></pre>
-<h2 id="_6">面向对象</h2>
-<h3 id="_7">静态数据成员</h3>
+<h2 id="_6">面向对象<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h3 id="_7">静态数据成员<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>在类内数据成员的声明前加上关键字static，该数据成员就是类内的静态数据成员。例如</p>
 <pre><code class="language-c++">// main.cpp
 #include&lt;iostream&gt;
@@ -806,7 +806,7 @@ void MyClass::getSum() {
 <li>如果静态数据成员的访问权限允许的话（即public的成员），可在程序中，按上述格式来引用静态数据成员 ；</li>
 <li>sizeof 运算符不会计算 静态成员变量。</li>
 </ol>
-<h3 id="_8">静态成员函数</h3>
+<h3 id="_8">静态成员函数<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>与静态成员变量类似，我们也可以声明一个静态成员函数。</p>
 <p>静态成员函数为类服务而不是为某一个类的具体对象服务。静态成员函数与静态成员变量一样，都是类的内部实现，属于类定义的一部分。普通成员函数必须具体作用于某个对象，而静态成员函数并不具体作用于某个对象。</p>
 <p>普通的成员函数一般都隐含了一个this指针，this指针指向类的对象本身，因为普通成员函数总是具体地属于类的某个具体对象的。当函数被调用时，系统会把当前对象的起始地址赋给 this 指针。通常情况下，this是缺省的。如函数fn()实际上是this-&gt;fn()。</p>
@@ -828,7 +828,7 @@ void MyClass::getSum() {
 </ol>
 <p><strong>拷贝构造函数的问题</strong></p>
 <p>在使用包含静态成员的类时，有时候会调用拷贝构造函数生成临时的隐藏的类对象，而这个临时对象在消亡时会调用析构函数有可能会对静态变量做操作（例如total_num--），可是这些对象在生成时却没有执行构造函数中的total_num++的操作。解决方案是为这个类写一个拷贝构造函数，在该拷贝构造函数中完成total_num++的操作。</p>
-<h1 id="ref">REF</h1>
+<h1 id="ref">REF<a class="headerlink" href="#ref" title="Permanent link">&para;</a></h1>
 <p>https://zhuanlan.zhihu.com/p/37439983</p>
 
               
