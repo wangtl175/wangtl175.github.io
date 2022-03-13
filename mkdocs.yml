@@ -21,3 +21,5 @@ nav:
   - 操作系统:
     - 缓冲区溢出攻击: operation_system/2020_12_24_buffer_overflow_attack.md
     - 一个线程能访问另一个线程的栈吗: operation_system/2021_06_12_can_a_thread_access_the_stack_of_other_threads.md
+  - 其它:
+    - 实习总结: others/2022_03_13_internship.md
