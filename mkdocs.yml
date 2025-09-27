@@ -14,6 +14,7 @@ nav:
     - C++关键字static总结: c_cpp/2021_02_20_cpp_static.md
     - C++ Map使用汇总: c_cpp/2021_02_23_cpp_map_reference.md
     - 右值引用和move语义: c_cpp/2022_01_05_rvalue.md
+    - shared_ptr线程安全: c_cpp/shared_ptr_thread_safe.md
   - leetcode:
     - N皇后的位运算解法: leetcode/2021_02_21_leetcode_n_queens.md
     - n的阶乘结果后面有多少个0: leetcode/2021_03_20_n_factorial_zeros.md
